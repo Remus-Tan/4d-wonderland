@@ -70,7 +70,7 @@ watch([bigAmount, smallAmount], async () => {
   }
 });
 
-watch([betNumber, iBet], async ([newValue, newBet], [oldValue, oldBet]) => {
+watch([betNumber, iBet], async ([newValue], [oldValue]) => {
   const re = /^[0-9]{4}$/;
   betNumber.value = betNumber.value.trim();
 
