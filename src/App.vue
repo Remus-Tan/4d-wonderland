@@ -563,6 +563,7 @@ onMounted(() => {
           <label
             for="view-bets"
             class="tab flex p-1 w-36 text-base justify-center rounded-md hover:cursor-pointer has-[:checked]:bg-white has-[:checked]:font-semibold"
+            :class="{'animate__animated animate__flash animate__infinite animate__slow': betList.length > 0}"
             >View Bets ({{ betList.length }})
             <input
               type="radio"
@@ -722,10 +723,10 @@ onMounted(() => {
     <img
       src="https://media.tenor.com/H2kPWWXr2uAAAAAi/cute-rolling.gif"
       alt="Rolling Thing"
-      class="transition-all duration-500 opacity-0 w-0 h-0"
+      class="transition-all duration-500 opacity-0"
       :class="{
-        '!opacity-100 !w-max !h-auto': betPlaced,
-        '!w-0 !h-0': rollingDone,
+        '!opacity-100 w-max h-auto': !rollingDone && betPlaced,
+        'w-0 h-0': rollingDone,
       }"
     />
     <div
