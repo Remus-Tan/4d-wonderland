@@ -563,7 +563,10 @@ onMounted(() => {
           <label
             for="view-bets"
             class="tab flex p-1 w-36 text-base justify-center rounded-md hover:cursor-pointer has-[:checked]:bg-white has-[:checked]:font-semibold"
-            :class="{'animate__animated animate__flash animate__infinite animate__slow': betList.length > 0}"
+            :class="{
+              'animate__animated animate__flash animate__infinite animate__slow':
+                betList.length > 0,
+            }"
             >View Bets ({{ betList.length }})
             <input
               type="radio"
@@ -713,7 +716,23 @@ onMounted(() => {
     }"
   >
     <button class="red-button !bg-transparent">You ran out of cash!</button>
-    <button class="red-button mt-4">Restart 🥲</button>
+    <button
+      class="red-button mt-4"
+      @click="
+        () => {
+          // Reset game state
+          gameStarted = !gameStarted;
+          betNumber = '';
+          betNumberError = '';
+          bigAmount = 0;
+          smallAmount = 0;
+          betAmountError = '';
+          cash = 50;
+        }
+      "
+    >
+      Restart 🥲
+    </button>
   </div>
 
   <div
