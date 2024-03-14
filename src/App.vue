@@ -1,5 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
+import { Bet } from "./types";
 
 const cash = ref();
 const initialCash = ref();
@@ -14,7 +15,7 @@ const formInvalid = ref(true);
 const betNumberError = ref();
 const betAmountError = ref();
 
-const betList = ref([]);
+const betList = ref<Bet[]>([]);
 
 const winningFirst = ref<string[]>([]);
 const winningSecond = ref<string[]>([]);
@@ -36,7 +37,7 @@ const endRoundCheck = ref(false);
 
 const tab = ref("make");
 
-watch([bigAmount, smallAmount], async ([newBig, newSmall], []) => {
+watch([bigAmount, smallAmount], async () => {
   endRoundCheck.value = false;
 
   try {
@@ -101,12 +102,12 @@ watch([betAmountError, betNumberError], async () => {
   }
 });
 
-function convert4DigitsToMap(input) {
+function convert4DigitsToMap(input: string) {
   const mapOutput = new Map();
 
   // create hashmap of digits
-  for (let i = 0; i < String(input).length; i++) {
-    const digitToCheck = String(input)[i];
+  for (let i = 0; i < input.length; i++) {
+    const digitToCheck = input[i];
     if (![...mapOutput.keys()].includes(digitToCheck)) {
       mapOutput.set(digitToCheck, 1);
     } else {
@@ -153,14 +154,6 @@ function makeBet() {
   winningStarter.value = arrayFromWinners.slice(3, 13);
   winningConsolation.value = arrayFromWinners.slice(13, 23);
 
-  // winningFirst.value[0] = 1234;
-  // winningSecond.value[0] = 5678;
-
-  winningStarter.value[0] = 2244;
-  // winningConsolation.value[1] = 1234;
-  // winningConsolation.value[3] = 5541;
-  winningConsolation.value[8] = 2244;
-
   for (let bet of betList.value) {
     checkBet(bet);
   }
@@ -180,7 +173,7 @@ function makeBet() {
   }, 2000);
 }
 
-function checkBet(bet) {
+function checkBet(bet: Bet) {
   // normal bet checker
   if (!bet.iBet) {
     for (let [index, prizeCategory] of [
@@ -198,31 +191,31 @@ function checkBet(bet) {
               // 1st
               case 0:
                 winnersArray.value[1] = true;
-                winAmount.value += 2000 * bet.betAmount;
+                winAmount.value += 2000 * bet.bigAmount;
                 break;
 
               // 2nd
               case 1:
                 winnersArray.value[2] = true;
-                winAmount.value += 1000 * bet.betAmount;
+                winAmount.value += 1000 * bet.bigAmount;
                 break;
 
               // 3rd
               case 2:
                 winnersArray.value[3] = true;
-                winAmount.value += 490 * bet.betAmount;
+                winAmount.value += 490 * bet.bigAmount;
                 break;
 
               // Starter
               case 3:
                 winnersArray.value["starter"].push(position);
-                winAmount.value += 250 * bet.betAmount;
+                winAmount.value += 250 * bet.bigAmount;
                 break;
 
               // Consolation
               case 4:
                 winnersArray.value["consolation"].push(position);
-                winAmount.value += 60 * bet.betAmount;
+                winAmount.value += 60 * bet.bigAmount;
                 break;
             }
           }
@@ -231,17 +224,17 @@ function checkBet(bet) {
             switch (Number(index)) {
               // 1st
               case 0:
-                winAmount.value += 3000 * bet.betAmount;
+                winAmount.value += 3000 * bet.smallAmount;
                 break;
 
               // 2nd
               case 1:
-                winAmount.value += 2000 * bet.betAmount;
+                winAmount.value += 2000 * bet.smallAmount;
                 break;
 
               // 3rd
               case 2:
-                winAmount.value += 800 * bet.betAmount;
+                winAmount.value += 800 * bet.smallAmount;
                 break;
             }
           }
@@ -318,16 +311,16 @@ function checkBet(bet) {
                 winnersArray.value[1] = true;
                 switch (repeatDigits) {
                   case 0:
-                    winAmount.value += 83 * bet.betAmount;
+                    winAmount.value += 83 * bet.bigAmount;
                     break;
                   case 1:
-                    winAmount.value += 166 * bet.betAmount;
+                    winAmount.value += 166 * bet.bigAmount;
                     break;
                   case 2:
-                    winAmount.value += 335 * bet.betAmount;
+                    winAmount.value += 335 * bet.bigAmount;
                     break;
                   case 3:
-                    winAmount.value += 500 * bet.betAmount;
+                    winAmount.value += 500 * bet.bigAmount;
                     break;
                 }
                 break;
@@ -337,16 +330,16 @@ function checkBet(bet) {
                 winnersArray.value[2] = true;
                 switch (repeatDigits) {
                   case 0:
-                    winAmount.value += 41 * bet.betAmount;
+                    winAmount.value += 41 * bet.bigAmount;
                     break;
                   case 1:
-                    winAmount.value += 83 * bet.betAmount;
+                    winAmount.value += 83 * bet.bigAmount;
                     break;
                   case 2:
-                    winAmount.value += 168 * bet.betAmount;
+                    winAmount.value += 168 * bet.bigAmount;
                     break;
                   case 3:
-                    winAmount.value += 250 * bet.betAmount;
+                    winAmount.value += 250 * bet.bigAmount;
                     break;
                 }
                 break;
@@ -356,16 +349,16 @@ function checkBet(bet) {
                 winnersArray.value[3] = true;
                 switch (repeatDigits) {
                   case 0:
-                    winAmount.value += 20 * bet.betAmount;
+                    winAmount.value += 20 * bet.bigAmount;
                     break;
                   case 1:
-                    winAmount.value += 40 * bet.betAmount;
+                    winAmount.value += 40 * bet.bigAmount;
                     break;
                   case 2:
-                    winAmount.value += 85 * bet.betAmount;
+                    winAmount.value += 85 * bet.bigAmount;
                     break;
                   case 3:
-                    winAmount.value += 127 * bet.betAmount;
+                    winAmount.value += 127 * bet.bigAmount;
                     break;
                 }
                 break;
@@ -375,16 +368,16 @@ function checkBet(bet) {
                 winnersArray.value["starter"].push(Number(position));
                 switch (repeatDigits) {
                   case 0:
-                    winAmount.value += 10 * bet.betAmount;
+                    winAmount.value += 10 * bet.bigAmount;
                     break;
                   case 1:
-                    winAmount.value += 20 * bet.betAmount;
+                    winAmount.value += 20 * bet.bigAmount;
                     break;
                   case 2:
-                    winAmount.value += 41 * bet.betAmount;
+                    winAmount.value += 41 * bet.bigAmount;
                     break;
                   case 3:
-                    winAmount.value += 62 * bet.betAmount;
+                    winAmount.value += 62 * bet.bigAmount;
                     break;
                 }
                 break;
@@ -394,16 +387,16 @@ function checkBet(bet) {
                 winnersArray.value["consolation"].push(Number(position));
                 switch (repeatDigits) {
                   case 0:
-                    winAmount.value += 3 * bet.betAmount;
+                    winAmount.value += 3 * bet.bigAmount;
                     break;
                   case 1:
-                    winAmount.value += 6 * bet.betAmount;
+                    winAmount.value += 6 * bet.bigAmount;
                     break;
                   case 2:
-                    winAmount.value += 10 * bet.betAmount;
+                    winAmount.value += 10 * bet.bigAmount;
                     break;
                   case 3:
-                    winAmount.value += 15 * bet.betAmount;
+                    winAmount.value += 15 * bet.bigAmount;
                     break;
                 }
                 break;
@@ -416,16 +409,16 @@ function checkBet(bet) {
               case 0:
                 switch (repeatDigits) {
                   case 0:
-                    winAmount.value += 125 * bet.betAmount;
+                    winAmount.value += 125 * bet.smallAmount;
                     break;
                   case 1:
-                    winAmount.value += 250 * bet.betAmount;
+                    winAmount.value += 250 * bet.smallAmount;
                     break;
                   case 2:
-                    winAmount.value += 500 * bet.betAmount;
+                    winAmount.value += 500 * bet.smallAmount;
                     break;
                   case 3:
-                    winAmount.value += 750 * bet.betAmount;
+                    winAmount.value += 750 * bet.smallAmount;
                     break;
                 }
                 break;
@@ -434,16 +427,16 @@ function checkBet(bet) {
               case 1:
                 switch (repeatDigits) {
                   case 0:
-                    winAmount.value += 83 * bet.betAmount;
+                    winAmount.value += 83 * bet.smallAmount;
                     break;
                   case 1:
-                    winAmount.value += 167 * bet.betAmount;
+                    winAmount.value += 167 * bet.smallAmount;
                     break;
                   case 2:
-                    winAmount.value += 333 * bet.betAmount;
+                    winAmount.value += 333 * bet.smallAmount;
                     break;
                   case 3:
-                    winAmount.value += 500 * bet.betAmount;
+                    winAmount.value += 500 * bet.smallAmount;
                     break;
                 }
                 break;
@@ -452,16 +445,16 @@ function checkBet(bet) {
               case 2:
                 switch (repeatDigits) {
                   case 0:
-                    winAmount.value += 33 * bet.betAmount;
+                    winAmount.value += 33 * bet.smallAmount;
                     break;
                   case 1:
-                    winAmount.value += 66 * bet.betAmount;
+                    winAmount.value += 66 * bet.smallAmount;
                     break;
                   case 2:
-                    winAmount.value += 133 * bet.betAmount;
+                    winAmount.value += 133 * bet.smallAmount;
                     break;
                   case 3:
-                    winAmount.value += 200 * bet.betAmount;
+                    winAmount.value += 200 * bet.smallAmount;
                     break;
                 }
                 break;
@@ -611,7 +604,7 @@ onMounted(() => {
                 class="hover:bg-slate-400/50 hover:invert hover:cursor-pointer justify-center flex"
                 @click="
                   () => {
-                    betList.pop(index);
+                    betList.splice(index, 1);
                     cash += bet.smallAmount + bet.bigAmount;
                   }
                 "
