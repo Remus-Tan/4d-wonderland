@@ -478,7 +478,7 @@ onMounted(() => {
     class="text-2xl h-screen w-screen max-h-screen max-w-screen overflow-hidden flex justify-center items-center"
   >
     <!-- Header -->
-    <div>
+    <div class="hidden xl:block">
       <p v-if="gameStarted" class="absolute left-4 top-4">
         Balance:
         <span
@@ -541,6 +541,15 @@ onMounted(() => {
           Start
         </button>
       </div>
+
+      <p v-if="gameStarted" class="xl:hidden">
+        Balance:
+        <span
+          class="font-xl font-medium text-red-400"
+          :class="{ '!text-green-400': cash >= initialCash }"
+          >${{ cash }}</span
+        >
+      </p>
 
       <div
         v-if="gameStarted"
@@ -705,6 +714,25 @@ onMounted(() => {
           >4D Game Rules / Prize Table</a
         >
       </div>
+
+      <button
+        @click="
+          () => {
+            // Reset game state
+            gameStarted = !gameStarted;
+            betNumber = '';
+            betNumberError = '';
+            bigAmount = 0;
+            smallAmount = 0;
+            betAmountError = '';
+            cash = 50;
+          }
+        "
+        class="red-button xl:hidden mt-20"
+        v-if="gameStarted"
+      >
+        Quit Game
+      </button>
     </div>
   </main>
 
