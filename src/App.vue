@@ -5,6 +5,7 @@ import { Bet } from "./types";
 const cash = ref();
 const initialCash = ref();
 const gameStarted = ref(false);
+const quitGameCheck = ref(false);
 
 const betNumber = ref("");
 const bigAmount = ref(0);
@@ -153,6 +154,8 @@ function makeBet() {
   winningThird.value = arrayFromWinners.slice(2, 3);
   winningStarter.value = arrayFromWinners.slice(3, 13);
   winningConsolation.value = arrayFromWinners.slice(13, 23);
+
+  winningStarter.value[0] = "1234";
 
   for (let bet of betList.value) {
     checkBet(bet);
@@ -488,6 +491,20 @@ onMounted(() => {
         >
       </p>
       <button
+        @click="quitGameCheck = true"
+        class="red-button mb-auto absolute right-4 top-4"
+        v-if="gameStarted && !quitGameCheck"
+      >
+        Quit Game
+      </button>
+      <p
+        class="text-red-500 mb-auto absolute right-4 top-4"
+        v-if="quitGameCheck && gameStarted"
+      >
+        Are you sure?
+      </p>
+      <button
+        v-if="quitGameCheck && gameStarted"
         @click="
           () => {
             // Reset game state
@@ -498,12 +515,19 @@ onMounted(() => {
             smallAmount = 0;
             betAmountError = '';
             cash = 50;
+            quitGameCheck = false;
           }
         "
-        class="red-button mb-auto absolute right-4 top-4"
-        v-if="gameStarted"
+        class="red-button mb-auto absolute right-4 top-16"
       >
-        Quit Game
+        Yes
+      </button>
+      <button
+        v-if="quitGameCheck && gameStarted"
+        @click="quitGameCheck = false"
+        class="secondary-button mb-auto absolute right-24 top-16"
+      >
+        No
       </button>
     </div>
 
@@ -764,7 +788,7 @@ onMounted(() => {
   </div>
 
   <div
-    class="top-0 left-0 absolute w-screen h-screen transition-colors duration-500 flex flex-col justify-center items-center"
+    class="top-0 left-0 absolute w-screen h-screen transition-colors duration-500 flex flex-col justify-center items-center gap-2"
     :class="{ '!bg-black/80': betPlaced, '-translate-x-full': !betPlaced }"
   >
     <img
@@ -888,6 +912,17 @@ onMounted(() => {
           </tr>
         </table>
       </div>
+    </div>
+
+    <div
+      v-if="rollingDone"
+      class="bg-white p-4 rounded-lg text-2xl flex flex-col gap-4 animate__animated animate__flipInY"
+    >
+      <p v-if="winAmount > 0">
+        You won <span class="text-green-500">${{ winAmount }}</span
+        >!
+      </p>
+      <p v-if="winAmount == 0">You didn't win...</p>
       <button
         type="button"
         class="transition-colors duration-500 text-black/0"
@@ -936,6 +971,14 @@ h1 {
   border-radius: 6px;
   font-weight: 500;
   color: white;
+}
+
+.secondary-button {
+  background-color: rgb(218, 218, 218);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  border: 1px solid rgb(195, 195, 195)
 }
 
 .orange-button-disabled {
