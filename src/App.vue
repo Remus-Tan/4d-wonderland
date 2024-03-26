@@ -1,21 +1,20 @@
-<script setup type="ts">
-import GameMenu from './components/GameMenu.vue';
-import StartMenu from './components/StartMenu.vue';
-import { ref } from 'vue';
+<script setup lang="ts">
+import GameMenu from "./components/GameMenu.vue";
+import StartMenu from "./components/StartMenu.vue";
+import { ref } from "vue";
 
 const gameStarted = ref(false);
 const initialCash = ref();
 const withAudio = ref(false);
 
-function initializeGame(cash) {
-    gameStarted.value = true;
-    initialCash.value = cash;
+function initializeGame(cash: number) {
+  gameStarted.value = true;
+  initialCash.value = cash;
 }
 
 function deinitializeGame() {
-    gameStarted.value = false;
+  gameStarted.value = false;
 }
-
 </script>
 
 <template>
@@ -30,8 +29,8 @@ function deinitializeGame() {
     <GameMenu
       v-if="gameStarted"
       @quit-game="deinitializeGame"
-      :initial-cash
-      :withAudio
+      :initial-cash="initialCash"
+      :withAudio="withAudio"
     />
   </main>
 </template>

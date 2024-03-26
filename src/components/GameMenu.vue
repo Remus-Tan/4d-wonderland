@@ -16,14 +16,14 @@ const gameOver = ref(false);
 <template>
   <div class="flex flex-col items-center gap-4">
     <GameHeader
-      :cash
+      :cash="cash"
       :initial-cash="props.initialCash"
       @quit-game="emit('quitGame')"
     />
     <BetMenu
-      :cash
+      :cash="cash"
       :initial-cash="props.initialCash"
-      :gameLoopReset
+      :gameLoopReset="gameLoopReset"
       @game-loop-reset="gameLoopReset = false"
       @update-cash="
         (newCash) => {
@@ -39,8 +39,8 @@ const gameOver = ref(false);
     />
     <BetRoll
       v-if="betList.length != 0"
-      :betList
-      :with-audio
+      :betList="betList"
+      :with-audio="withAudio"
       @win-amount="(winAmount: Number) => {
         cash += winAmount; betList = []; gameLoopReset = true
       }
